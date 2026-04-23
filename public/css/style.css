@@ -117,14 +117,15 @@ ul { list-style: none; }
 }
 .brand strong { color: var(--royal-400); }
 .brand-icon {
-  width: 36px; height: 36px;
-  background: var(--royal-400);
-  border-radius: 10px;
+  width: 38px; height: 38px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1rem;
-  font-weight: 900;
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(65,105,225,.4);
+  flex-shrink: 0;
+}
+.brand-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 .nav-links {
   display: flex;
@@ -1129,7 +1130,6 @@ a.contact-item:hover {
 }
 .footer .brand { color: var(--white); }
 .footer .brand strong { color: var(--royal-300); }
-.footer .brand-icon { background: var(--royal-400); }
 .footer-brand .brand { margin-bottom: 1rem; }
 .footer-brand p {
   font-size: 0.88rem;
