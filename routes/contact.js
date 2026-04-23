@@ -89,6 +89,35 @@ router.post('/', validateContact, async (req, res) => {
     }
   }
 
+  // Send Telegram notification if configured
+  if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+    try {
+      const tgText =
+        `🔔 *New Enquiry — Philoentree Website*\n\n` +
+        `👤 *Name:* ${name}\n` +
+        `📧 *Email:* ${email}\n` +
+        `📱 *Phone:* ${phone || '—'}\n` +
+        `🛠 *Service:* ${service}\n` +
+        `💬 *Message:*\n${message}\n\n` +
+        `🕐 ${new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' })} (MYT)`;
+
+      await fetch(
+        `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: process.env.TELEGRAM_CHAT_ID,
+            text: tgText,
+            parse_mode: 'Markdown'
+          })
+        }
+      );
+    } catch (tgErr) {
+      console.error('Telegram notification failed:', tgErr.message);
+    }
+  }
+
   res.json({ success: true, message: 'Message received! We will contact you shortly.' });
 });
 
