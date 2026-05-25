@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#ea580c" />
+  <title>Sedap POS — Scan to Order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top header -->
+    <header class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-top">
+          <button class="icon-btn" id="backBtn" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="hero-actions">
+            <button class="icon-btn" id="langBtn" aria-label="Language">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
+            </button>
+            <button class="icon-btn" id="searchBtn" aria-label="Search">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="store-card">
+          <div class="store-logo">S</div>
+          <div class="store-info">
+            <h1 class="store-name">Sedap Kitchen</h1>
+            <div class="store-meta">
+              <span class="rating">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 .587l3.668 7.431L24 9.748l-6 5.847L19.336 24 12 20.013 4.664 24 6 15.595 0 9.748l8.332-1.73z"/></svg>
+                4.8
+              </span>
+              <span class="dot">·</span>
+              <span>10–15 min</span>
+              <span class="dot">·</span>
+              <span class="open">Open</span>
+            </div>
+            <div class="store-spot">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Dine-in · Table <strong id="spotNumber">303</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search bar (collapsible) -->
+    <div class="search-wrap" id="searchWrap" hidden>
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" placeholder="Search dishes..." />
+        <button class="search-close" id="searchClose" aria-label="Close search">×</button>
+      </div>
+    </div>
+
+    <!-- Category tabs -->
+    <nav class="categories" id="categories"></nav>
+
+    <!-- Menu list -->
+    <main class="menu" id="menu"></main>
+
+    <!-- Floating cart bar -->
+    <div class="cart-bar" id="cartBar" hidden>
+      <div class="cart-bar-left">
+        <div class="cart-bar-count" id="cartCount">0</div>
+        <div class="cart-bar-text">
+          <div class="cart-bar-label">View Order</div>
+          <div class="cart-bar-sub" id="cartItemsText">0 items</div>
+        </div>
+      </div>
+      <div class="cart-bar-right">
+        <span id="cartTotal">$0.00</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Item detail modal -->
+  <div class="modal" id="itemModal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-sheet">
+      <button class="modal-close" data-close aria-label="Close">×</button>
+      <div class="modal-hero" id="modalHero"></div>
+      <div class="modal-body">
+        <h2 id="modalName"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="modal-price" id="modalPrice"></div>
+
+        <div id="modalOptions"></div>
+
+        <div class="modal-notes">
+          <label for="modalNotes">Special instructions</label>
+          <textarea id="modalNotes" rows="2" placeholder="e.g. less spicy, no onions"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="qty-stepper">
+          <button class="qty-btn" id="qtyMinus" aria-label="Decrease">−</button>
+          <span id="qtyValue">1</span>
+          <button class="qty-btn" id="qtyPlus" aria-label="Increase">+</button>
+        </div>
+        <button class="primary-btn" id="addToCartBtn">
+          <span>Add to order</span>
+          <strong id="addToCartTotal">$0.00</strong>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart drawer -->
+  <div class="modal" id="cartModal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-sheet cart-sheet">
+      <div class="cart-head">
+        <h2>Your Order</h2>
+        <button class="modal-close" data-close aria-label="Close">×</button>
+      </div>
+      <div class="cart-list" id="cartList"></div>
+      <div class="cart-summary" id="cartSummary"></div>
+      <div class="modal-footer">
+        <button class="primary-btn wide" id="checkoutBtn">
+          <span>Place order</span>
+          <strong id="checkoutTotal">$0.00</strong>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation -->
+  <div class="modal" id="confirmModal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-sheet confirm-sheet">
+      <div class="confirm-icon">
+        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h2>Order placed!</h2>
+      <p class="confirm-sub">Your order has been sent to the kitchen.<br/>Table <strong id="confirmSpot">303</strong> · Order <strong id="confirmOrderId">#0000</strong></p>
+      <button class="primary-btn wide" data-close>Back to menu</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
